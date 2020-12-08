@@ -1,29 +1,61 @@
 /*------------------------------------*\
-  #FONTS
+#FONTS
 \*------------------------------------*/
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 200;
+    src: url("../fonts/Inter-UI-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 400;
+    src: url("../fonts/Inter-UI-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 600;
+    src: url("../fonts/Inter-UI-Bold.woff2") format("woff2");
+}
 
 /*------------------------------------*\
 #Variables
 \*------------------------------------*/
 
 :root {
-    --color-alpha: #A3333D;
+    /* colors */
+    --global-color-alpha-x-light: rgba(26, 182, 255, 0.3);
+    --global-color-alpha-light: #1ab6ff;
+    --global-color-alpha: #009de6;
 
-    --color-neutral-xx-light: white;
-    --color-neutral-x-light: #F0DDDE;
-    --color-neutral-light: #A39697;
-    --color-neutral: #706768;
-    --color-neutral-dark: #575051;
-    --color-neutral-x-dark: #242121;
-}
+    --global-color-neutral-xx-light: #ffffff;
+    --global-color-neutral-x-light: #f0f1f2;
+    --global-color-neutral-light: #c6cacc;
+    --global-color-neutral: #a1a5a6;
+    --global-color-neutral-dark: #616466;
+    --global-color-neutral-x-dark: #17191a;
 
-:root .c-darkmode {
-    --color-alpha: #242121;
-    --color-neutral-x-dark: white;
+    /* baseline settings */
+    --global-baseline: 8px;         
+    --global-whitespace: calc(var(--global-baseline) * 2); /* = 16px */
+
+    --global-whitespace-md: calc(var(--global-baseline) * 1); /*  = 8px */
+    --global-whitespace-lg: calc(var(--global-baseline) * 4); /*  = 32px */
+
+    /* fonts */
+
+    /* shadows */
+    --global-input-focus-boxShadow: 0 0 0 3px var(--global-color-alpha-x-light);
+
+    /* borders */
+
+    /* transitions */
 }
 
 /*------------------------------------*\
-  #GENERIC
+#GENERIC
 \*------------------------------------*/
 
 /*
@@ -35,11 +67,12 @@
 html {
     font-size: 16px;
     line-height: 1.5;
-    font-family: "Montserrat", Helvetica, arial, sans-serif;
-    color: #202024;
+    font-family: "Inter", sans-serif;
+    color: var(--global-color-neutral-x-dark);
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--global-color-alpha);
 }
 
 *,
@@ -48,37 +81,33 @@ html {
     box-sizing: inherit;
 }
 
-.c-darkmode {
-    background: #242121;
-}
-
 /*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * Customize the background color to match your design.
- */
+* Remove text-shadow in selection highlight:
+* https://twitter.com/miketaylr/status/12228805301
+*
+* Customize the background color to match your design.
+*/
 
- ::-moz-selection {
-    background: #5051DB;
+::-moz-selection {
+    background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
 }
 
 ::selection {
-    background: #5051DB;
+    background: var(--global-color-alpha);
     color: white;
     text-shadow: none;
 }
 
 /*------------------------------------*\
-  #Elements
+#Elements
 \*------------------------------------*/
 
 /*
-    Elements: Images
-    ---
-    Default markup for images to make them responsive
+Elements: Images
+---
+Default markup for images to make them responsive
 */
 
 img {
@@ -95,7 +124,7 @@ img {
 h1,
 h2,
 h3 {
-    font-weight: 700;
+    font-weight: 600;
 }
 
 h1 {
@@ -162,7 +191,6 @@ figcaption {
     font-size: 12px;
     line-height: 16px;
     margin-top: 8px;
-    color: #3C3C42;
 }
 
 hr {
@@ -173,31 +201,42 @@ hr {
 }
 
 a {
-    color: #5051DB;
-    transition: all .1s ease-in-out;
+    transition: all var(--transition-alpha);
+    color: var(--color-alpha);
+    outline-color: var(--color-alpha);
+    outline-width: medium;
+    outline-offset: 2px;
 }
 
 a:visited,
 a:active {
-    color: #3E3EA8;
+    color: var(--color-alpha);
 }
 
 a:hover,
 a:focus {
-    color: #3E3EA8;
+    color: var(--color-alpha-light);
 }
 
 label,
 input {
-    display: block;
+    display: inline-block;
 }
 
 select {
     width: 100%;
 }
 
+input::placeholder {
+    color: var(--color-neutral);
+}
+
+input:disabled {
+    cursor: not-allowed;
+}
+
 /*------------------------------------*\
-  #OBJECTS
+#OBJECTS
 \*------------------------------------*/
 
 /*
@@ -211,6 +250,32 @@ select {
     padding: 24px 24px 0;
 }
 
+/* size modifiers */
+
+.o-row--lg {
+    padding-top: 48px;
+    padding-bottom: 24px;
+}
+
+.o-row--xl {
+    padding-top: 72px;
+    padding-bottom: 48px;
+}
+
+@media (min-width: 768px) {
+    .o-row {
+        padding-left: 48px;
+        padding-right: 48px;
+    }
+}
+
+@media (min-width: 992px) {
+    .o-row--xl {
+        padding-top: 96px;
+        padding-bottom: 72px;
+    }
+}
+
 /*
     Objects: Container
     ---
@@ -220,8 +285,22 @@ select {
 .o-container {
     margin-left: auto;
     margin-right: auto;
-    max-width: 80em; /* 80* 16px = 1280px */
+    max-width: 79.5em; /* 79.5 * 16px = 1272 */
     width: 100%;
+}
+
+/*
+    Objects: section
+    ---
+    Creates vertical whitespace between adjacent sections inside a row
+*/
+
+.o-section {
+    position: relative;
+}
+
+.o-section + .o-section {
+    padding-top: 8px;
 }
 
 /*
@@ -282,358 +361,227 @@ select {
 }
 
 /*------------------------------------*\
-  #COMPONENTS
+#COMPONENTS
 \*------------------------------------*/
 
 /*
-    Component: header
+    Component: Wrapper
     ---
-    Main header of the website
+    Form wrapper
 */
 
-.c-header__background {
-    position: absolute;
-    width: 100vw;
-    height: 560px;
-    background-color: var(--color-alpha);
-}
-
-.c-header__bottom {
-    display: none;
-    position: absolute;
-    width: 100vw;
-    top: 560px;
-}
-
-@media(min-width: 736px) {
-    .c-header__bottom {
-        display: block;
-    }
-}
-
-.c-header__content {
-    position: relative;
-    text-align: center;
-    margin: 0 24px;
-}
-
-.c-header__title {
-    font-size: 20px;
-    letter-spacing: 1px;
-    color: var(--color-neutral-xx-light);
-    font-weight: 400;
-    padding-top: 32px;
-    margin-bottom: 8px;
-    text-align: start;
-}
-
-.c-header__subtitle {
-    font-size: 24px;
-    line-height: 32px;
-    color: var(--color-neutral-xx-light);
-    font-weight: 600;
-    text-align: center;
-}
-
-@media(min-width: 536px) {
-    .c-header__title {
-        font-size: 28px;
-        margin-bottom: 32px;
-    }
-
-    .c-header__subtitle {
-        font-size: 32px;
-    }
-}
-
-@media(min-width: 1280px) {
-    .c-header__title {
-        padding-top: 48px;
-    }
-}
-
-.c-header__mockup {
-    height: 456px;
-    display: block;
-    margin: 0 auto;
-}
-
-.c-header__mockup-release {
-    font-size: 24px;
-    margin-top: 16px;
-}
-
-/*
-    Component: main
-    ---
-    Main of the website
-*/
-
-.c-main {
-    text-align: center;
-    margin-bottom: 80px;
-}
-
-.c-main__item {
-    max-width: 570px;
-    margin: 0 24px;
-}
-
-@media(min-width: 616px) {
-    .c-main__item {
-        margin: 0 auto;
-    }
-}
-
-.c-main__item-title {
-    font-size: 24px;
-    margin-top: 24px;
-    margin-bottom: 8px;
-}
-
-.c-main__item-text {
-    font-size: 18px;
-    line-height: 24px;
-    margin: 0;
-}
-
-@media(min-width: 536px) {
-    .c-main__item-title {
-        font-size: 32px;
-        margin-top: 56px;
-        margin-bottom: 18px;
-    }
-
-    .c-main__item-text {
-        font-size: 24px;
-        line-height: 32px;
-    }
-}
-
-.c-main__subscribe {
+.c-wrapper {
     display: flex;
+    justify-content: center;
     align-items: center;
-    max-width: 570px;
-    margin-top: 32px;
-    margin-bottom: 16px;
-}
-
-.c-main__subscribe-input {
-    font-family: inherit;
-    font-size: 18px;
-    width: 100%;
-    margin-right: 24px;
-    border: none;
-    border-bottom: 1px solid var(--color-neutral-x-dark);
-    outline: none;
-}
-
-.c-main__subscribe-button {
-    position: relative;
-    font-size: 20px;
-    background: var(--color-alpha);
-    color: var(--color-neutral-xx-light);
-    padding: 8px 16px;
-    border-radius: 12px;
-    cursor: pointer;
-    overflow: hidden;
-    min-width: 136px;
-}
-
-@media(min-width: 528px) {
-    .c-main__subscribe {
-        display: flex;
-    }
-
-    .c-main__subscribe-button-input {
-        margin: auto;
-    }
-
-    .c-main__subscribe-input {
-        font-size: 24px;
-    }
-
-    .c-main__subscribe-button {
-        font-size: 24px;
-        min-width: 160px;
-    }
-}
-
-.c-main__subscribe-button span {
-    position: relative;
-    z-index: 2;
-}
-
-.c-main__subscribe-button:after {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background: #872a31;
-    transition: all 300ms;
-    border-radius: 12px;
-}
-
-.c-main__subscribe-button:hover {
-    color: var(--color-neutral-xx-light);
-}
-
-.c-main__subscribe-button:hover:after {
-    width: 100%;
+    height: 100vh;
 }
 
 /*
-    Component: App Header
+    Component: Form
     ---
-    Main app header of the website
+    Main form
 */
 
-.c-app-header {
-    background: var(--color-alpha);
-    padding: 0 16px;
+.c-form {
+    background-color: var(--global-color-neutral-xx-light);
+    border-radius: 4px;
+    width: 32rem;
+    border-top: 8px solid var(--global-color-alpha-light);
+    padding: var(--global-whitespace-lg);
 }
 
-.c-app-header__content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.c-darkmode .c-app-header {
-    border-bottom: 1px solid var(--color-neutral-dark);
-}
-
-.c-app-header__title {
-    font-size: 20px;
-    letter-spacing: 1px;
-    color: var(--color-neutral-xx-light);
-    font-weight: 400;
-    padding: 16px 0;
+.c-form__title {
+    font-size: 1.75rem;
+    line-height: 2.3125rem;
     margin: 0;
+    padding: 0;
+    margin-bottom: var(--global-whitespace);
 }
 
-@media(min-width: 536px) {
-    .c-app-header__title {
-        font-size: 28px;
-    }
+.c-form__subtitle {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    margin-bottom: var(--global-whitespace-lg);
+    color: var(--global-color-neutral-dark);
 }
 
 /*
-    Component: App Main
+    Component: Input
     ---
-    App main of the website
+    Main inputs of the form
 */
 
-.c-app-main {
+.c-input {
+    margin-bottom: var(--global-whitespace-lg);
 }
 
-.c-app-main h2 {
-    color: var(--color-neutral-x-dark);
-    font-size: 32px;
-    text-align: center;
-    padding-top: 16px;
+.c-input__title {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    margin-bottom: var(--global-whitespace-md);
 }
 
-.c-app-main__content {
-    margin-top: 8px;
-    margin-left: 16px;
-}
+/*
+    Component: List
+    ---
+    Main list of checkboxes and inputs of the form
+*/
 
-@media(min-width: 1232px) {
-    .c-app-main {
-        display: grid;
-        grid-template-columns: 1fr 220px;
-    }
-
-    .c-app-main h2 {
-        grid-column: 1 / span 2;
-    }
-    
-    .c-app-main__content {
-        margin-top: 0;
-        margin-left: 8px;
-    }
-}
-
-.c-app-main__content p {
-    color: var(--color-neutral-x-dark);
-    font-size: 18px;
+.c-list {
     margin: 0;
     padding: 0;
 }
 
-/*
-    Component: Map
-    ---
-    Main map of the website
-*/
-
-#c-map {
-    height: 800px;
-    border: 1px solid white;
+.c-list-item {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    margin-bottom: var(--global-whitespace-md);
 }
 
 /*
-    Component: Toggle
+    Component: Radio and checkboxes
     ---
-    Darkmode toggle of the website
+    for all checkboxes and radio buttons of the form
 */
 
-.c-toggle {
+.c-custom-option__fake-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    margin-right: var(--global-whitespace-md);
+    border: 2px solid var(--global-color-neutral-light);
+}
+
+.c-custom-option__symbol {
+    opacity: 0;
+    transform: scale(.5);
+    transition: transform 100ms, opacity 100ms;
+}
+
+.c-custom-option {
     display: flex;
     align-items: center;
 }
 
-.c-toggle__text {
-    margin: 0;
-    margin-right: 8px;
-    color: var(--color-neutral-xx-light);
-    font-size: 20px;
+.c-option--hidden:checked + .c-custom-option .c-custom-option__symbol {
+    opacity: 1;
+    transform: scale(1);
 }
 
-.c-label {
-    margin-bottom: 0;
-    font-size: 14px;
-    line-height: 16px;
-    color: var(--color-neutral-xx-light);
+/* hover state */
+/* .c-custom-option:hover {
+} */
+
+/* focused and active state */
+.c-option--hidden:focus + .c-custom-option .c-custom-option__fake-input,
+.c-option--hidden:active + .c-custom-option .c-custom-option__fake-input {
+    border: 2px solid var(--global-color-alpha);
+    box-shadow: var(--global-input-focus-boxShadow);
 }
 
-.c-custom-toggle__fake-input {
-    display: block;
-    height: 16px;
-    width: 48px;
-    border-radius: 32px;
-    background: var(--color-neutral-xx-light);
-    border: 1px solid var(--color-neutral-x-dark);
-    cursor: pointer;
+/*
+    Component: Radio buttons
+    ---
+    Main radio buttons of the form
+*/
+
+.c-custom-option__fake-input--radio {
+    border-radius: 100%;
 }
 
-.c-custom-toggle__fake-input::after {
-    top: -5px;
-    left: -1px;
-    position: relative;
-    display: block;
-    content: '';
-    height: 24px;
-    width: 24px;
-    border-radius: 24px;
-    background: var(--color-neutral-x-dark);
-    transition: 75ms all ease-in;
+.c-option--hidden:checked + .c-custom-option .c-custom-option__fake-input--radio {
+    border: 2px solid var(--global-color-alpha);
 }
 
-.c-darkmode .c-custom-toggle__fake-input::after {
-    /* border: 3px solid #A3333D; */
-    background: #A3333D;
+.c-custom-option__fake-input--radio .c-custom-option__symbol {
+    background-color: var(--global-color-alpha);
+    border-radius: 100%;
+    width: 6px;
+    height: 6px;
 }
 
-.c-option--hidden:checked + .c-custom-toggle .c-custom-toggle__fake-input::after {
-    transform: translate(24px,0);
+/*
+    Component: Checkboxes
+    ---
+    Main checkboxes of the form
+*/
+
+.c-custom-option__fake-input--checkbox {
+    border-radius: 2px;
+}
+
+.c-option--hidden:checked + .c-custom-option .c-custom-option__fake-input--checkbox {
+    border: 2px solid var(--global-color-alpha);
+    background-color: var(--global-color-alpha);
+}
+
+.c-custom-option__fake-input--checkbox .c-custom-option__symbol {
+    width: 10px;
+    height: 10px;
+    fill: var(--global-color-neutral-xx-light);
+}
+
+/*
+    Component: Text input
+    ---
+    Main input field of the form
+*/
+
+.c-text-input {
+    width: calc(100% - 2.2rem);
+    max-width: 100%;
+    height: 3rem;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--global-color-neutral-dark);
+    padding: 0 16px;
+    outline: none;
+    border: 2px solid var(--global-color-neutral);
+    border-radius: 2px;
+}
+
+.c-text-input:focus,
+.c-text-input:active {
+    border: 2px solid var(--global-color-alpha);
+    box-shadow: var(--global-input-focus-boxShadow);
+}
+
+/*
+    Component: Submit
+    ---
+    Main submit button of the form
+*/
+
+.c-submit {
+    width: 100%;
+    height: 3rem;
+    border-radius: 3px;
+    background-color: var(--global-color-alpha);
+    color: white;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+}
+
+.c-submit:hover {
+    background-color: var(--global-color-alpha-light);
+}
+
+.c-submit:focus,
+.c-submit:active {
+    box-shadow: var(--global-input-focus-boxShadow);
 }
 
 /*------------------------------------*\
-  #UTILITIES
+#UTILITIES
 \*------------------------------------*/
 
 /*
@@ -642,12 +590,12 @@ select {
     Utility classes to put specific colors onto elements
 */
 
-.u-color-neutral {
-    color: #7373F5;
+.u-color-neutral-light {
+    color: lightGray;
 }
 
-.u-color-neutral-dark {
-    color: #5051DB;
+.u-color-neutral {
+    color: Gray;
 }
 
 /*
@@ -691,23 +639,19 @@ select {
 */
 
 .u-max-width-xs {
-    max-width: 18em !important;
+    max-width: 27em !important;
 }
 
 .u-max-width-sm {
-    max-width: 36em !important;
+    max-width: 32em !important;
 }
 
 .u-max-width-md {
-    max-width: 42em !important;
+    max-width: 50em !important;
 }
 
 .u-max-width-lg {
-    max-width: 60em !important;
-}
-
-.u-max-width-xl {
-    max-width: 75em !important;
+    max-width: 63.5em !important;
 }
 
 .u-max-width-none {
@@ -715,9 +659,31 @@ select {
 }
 
 
+/*
+    Utilities: align
+    ---
+    Utility classes align text or components
+*/
+
+.u-align-text-center {
+    text-align: center;
+}
+
+.u-align-center {
+    margin: 0 auto;
+}
+
+/*
+    Utilities: text
+    Utility classes to create smaller or bigger test
+*/
+
+.u-text-sm {
+    font-size: 14px;
+}
 
 /*------------------------------------*\
-  #MEDIA
+#MEDIA
 \*------------------------------------*/
 
 /*
@@ -729,7 +695,7 @@ select {
 */
 
 /* Extra small devices (portrait phones, less than 576px)
-   No media query since this is the default in mobile first design
+No media query since this is the default in mobile first design
 */
 
 /* Small devices (landscape phones, 576px and up)
@@ -777,9 +743,9 @@ select {
         content: " (" attr(title) ")";
     }
     /*
-     * Don't show links that are fragment identifiers,
-     * or use the `javascript:` pseudo protocol
-     */
+    * Don't show links that are fragment identifiers,
+    * or use the `javascript:` pseudo protocol
+    */
     a[href^="#"]:after,
     a[href^="javascript:"]:after {
         content: "";
@@ -793,9 +759,9 @@ select {
         page-break-inside: avoid;
     }
     /*
-     * Printing Tables:
-     * http://css-discuss.incutio.com/wiki/Printing_Tables
-     */
+    * Printing Tables:
+    * http://css-discuss.incutio.com/wiki/Printing_Tables
+    */
     thead {
         display: table-header-group;
     }
